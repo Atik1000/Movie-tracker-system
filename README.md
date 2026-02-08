@@ -54,6 +54,95 @@ A personal movie watchlist app — discover, search, and manage movies powered b
 
    Open [http://localhost:3000](http://localhost:3000).
 
+## Docker Setup
+
+You can run this application using Docker for both development and production environments.
+
+### Prerequisites
+
+- Docker installed ([Get Docker](https://docs.docker.com/get-docker/))
+- Docker Compose installed (included with Docker Desktop)
+
+### Quick Start with Helper Script
+
+The easiest way to get started:
+
+```bash
+# Test your Docker setup
+./docker-test.sh
+
+# Use interactive helper (recommended)
+./docker-helper.sh
+```
+
+The helper script provides an interactive menu for all Docker operations.
+
+### Production (Docker Compose)
+
+1. **Create environment file**
+
+   ```bash
+   cp .env.local.example .env
+   ```
+
+   Edit `.env` and set your TMDB API key:
+
+   ```env
+   NEXT_PUBLIC_TMDB_API_KEY=your_tmdb_api_key_here
+   ```
+
+2. **Build and run**
+
+   ```bash
+   docker-compose up -d
+   ```
+
+   The app will be available at [http://localhost:3000](http://localhost:3000).
+
+3. **Stop the container**
+
+   ```bash
+   docker-compose down
+   ```
+
+### Development (Docker Compose)
+
+For development with hot reload:
+
+```bash
+docker-compose -f docker-compose.dev.yml up
+```
+
+This mounts your local code into the container, so changes are reflected immediately.
+
+### Docker Commands
+
+| Command                              | Description                         |
+| ------------------------------------ | ----------------------------------- |
+| `docker-compose up -d`              | Start production container          |
+| `docker-compose down`               | Stop and remove containers          |
+| `docker-compose logs -f`            | View container logs                 |
+| `docker-compose restart`            | Restart containers                  |
+| `docker-compose -f docker-compose.dev.yml up` | Start dev mode with hot reload |
+| `docker build -t movie-tracker .`   | Build image manually                |
+| `docker run -p 3000:3000 -e NEXT_PUBLIC_TMDB_API_KEY=your_key movie-tracker` | Run manually |
+
+### Docker Image Details
+
+- **Base image**: Node.js 20 Alpine (lightweight)
+- **Multi-stage build**: Optimized for production
+- **Output size**: ~150MB (compressed)
+- **Security**: Runs as non-root user
+- **Health check**: Automatic container health monitoring
+
+### Additional Docker Resources
+
+- 📚 [Comprehensive Docker Guide](./DOCKER.md) - Detailed deployment instructions
+- 📋 [Docker Quick Reference](./DOCKER-REFERENCE.md) - Command cheatsheet
+- 🧪 [Setup Test Script](./docker-test.sh) - Verify Docker installation
+- 🛠️ [Helper Script](./docker-helper.sh) - Interactive Docker menu
+- 📝 [Makefile](./Makefile) - Command shortcuts
+
 ## Scripts
 
 | Command            | Description                    |
