@@ -10,6 +10,7 @@ import { getMovieDetails, getImageUrl } from '@/lib/tmdb';
 import { useWatchlistActions } from '@/hooks/use-watchlist-actions';
 import { useMovieLoader } from '@/hooks/use-movie-loader';
 import { useAuth } from '@/contexts/auth-context';
+import { motion } from 'framer-motion';
 
 export default function MovieDetailsPage() {
   const params = useParams();
@@ -54,47 +55,81 @@ export default function MovieDetailsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <nav className="bg-card/80 backdrop-blur-md border-b border-border/30 p-4">
+      <motion.nav
+        className="bg-card/80 backdrop-blur-md border-b border-border/30 p-4"
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.4 }}
+      >
         <div className="max-w-6xl mx-auto">
-          <button
+          <motion.button
             type="button"
             onClick={() => router.back()}
             className="inline-flex items-center text-primary hover:text-primary/80 transition-colors mb-4"
+            whileHover={{ x: -5 }}
+            whileTap={{ scale: 0.95 }}
           >
             <ArrowLeft className="w-5 h-5 mr-2" />
             Back
-          </button>
+          </motion.button>
         </div>
-      </nav>
+      </motion.nav>
 
-      <div className="relative h-64 sm:h-80 md:h-96 overflow-hidden bg-secondary">
-        <img
+      <motion.div
+        className="relative h-64 sm:h-80 md:h-96 overflow-hidden bg-secondary"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.6 }}
+      >
+        <motion.img
           src={getImageUrl(
             movie.backdrop_path ?? movie.poster_path,
             'original'
           )}
           alt={movie.title}
           className="w-full h-full object-cover"
+          initial={{ scale: 1.1 }}
+          animate={{ scale: 1 }}
+          transition={{ duration: 0.8 }}
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent" />
-      </div>
+      </motion.div>
 
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16 sm:-mt-20 md:-mt-24 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
-          <div className="md:col-span-1 flex justify-center md:block">
-            <div className="rounded-lg overflow-hidden shadow-2xl mb-6 w-full max-w-xs md:max-w-none">
+          <motion.div
+            className="md:col-span-1 flex justify-center md:block"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.2 }}
+          >
+            <motion.div
+              className="rounded-lg overflow-hidden shadow-2xl mb-6 w-full max-w-xs md:max-w-none"
+              whileHover={{ scale: 1.05, rotate: 2 }}
+              transition={{ duration: 0.3 }}
+            >
               <img
                 src={getImageUrl(movie.poster_path, 'w500')}
                 alt={movie.title}
                 className="w-full h-auto object-cover"
               />
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
 
-          <div className="md:col-span-2">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 text-balance">
+          <motion.div
+            className="md:col-span-2"
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <motion.h1
+              className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 text-balance"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+            >
               {movie.title}
-            </h1>
+            </motion.h1>
             {movie.tagline && (
               <p className="text-lg text-muted-foreground italic mb-4">
                 &quot;{movie.tagline}&quot;
@@ -123,22 +158,39 @@ export default function MovieDetailsPage() {
             )}
 
             {user && (
-              <div className="flex gap-4 mb-8">
-                <Button
-                  onClick={() => toggleMovie(movie.id, movie.title)}
-                  className={`px-8 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 ${isInWatchlist(movie.id) ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-secondary/50 text-foreground hover:bg-secondary'}`}
+              <motion.div
+                className="flex gap-4 mb-8"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  <Heart
-                    className={`w-5 h-5 ${isInWatchlist(movie.id) ? 'fill-current' : ''}`}
-                  />
-                  {isInWatchlist(movie.id)
-                    ? 'Remove from Watchlist'
-                    : 'Add to Watchlist'}
-                </Button>
-              </div>
+                  <Button
+                    onClick={() => toggleMovie(movie.id, movie.title)}
+                    className={`px-8 py-3 rounded-lg font-semibold transition-all duration-200 flex items-center gap-2 ${isInWatchlist(movie.id) ? 'bg-primary text-primary-foreground hover:bg-primary/90' : 'bg-secondary/50 text-foreground hover:bg-secondary'}`}
+                  >
+                    <motion.div
+                      animate={isInWatchlist(movie.id) ? {
+                        scale: [1, 1.3, 1],
+                      } : {}}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <Heart
+                        className={`w-5 h-5 ${isInWatchlist(movie.id) ? 'fill-current' : ''}`}
+                      />
+                    </motion.div>
+                    {isInWatchlist(movie.id)
+                      ? 'Remove from Watchlist'
+                      : 'Add to Watchlist'}
+                  </Button>
+                </motion.div>
+              </motion.div>
             )}
 
-            <div className="space-y-6">
+            <motion.div className="space-y-6">
               {movie.release_date && (
                 <div>
                   <h3 className="text-sm font-semibold text-muted-foreground uppercase mb-2">
@@ -173,9 +225,14 @@ export default function MovieDetailsPage() {
                   <p className="text-lg">{movie.status}</p>
                 </div>
               )}
-            </div>
+            </motion.div>
 
-            <div className="mt-12 flex flex-col sm:flex-row gap-3 sm:gap-4">
+            <motion.div
+              className="mt-12 flex flex-col sm:flex-row gap-3 sm:gap-4"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 }}
+            >
               <Link href="/search" className="w-full sm:w-auto">
                 <Button
                   variant="outline"
@@ -189,8 +246,8 @@ export default function MovieDetailsPage() {
                   View Watchlist
                 </Button>
               </Link>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </div>
     </div>

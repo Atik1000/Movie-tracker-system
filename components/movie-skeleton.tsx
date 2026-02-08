@@ -1,9 +1,15 @@
 import React from 'react';
 import { Skeleton } from '@/components/ui/skeleton';
+import { motion } from 'framer-motion';
 
 export function MovieCardSkeleton() {
   return (
-    <div className="bg-card border border-border/20 rounded-lg overflow-hidden">
+    <motion.div
+      className="bg-card border border-border/20 rounded-lg overflow-hidden"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+    >
       <Skeleton className="h-64 w-full" />
       <div className="p-5 space-y-3">
         <Skeleton className="h-6 w-3/4" />
@@ -17,7 +23,7 @@ export function MovieCardSkeleton() {
           <Skeleton className="h-10 w-10" />
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -25,7 +31,14 @@ export function MovieGridSkeleton({ count = 6 }: { count?: number }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
       {Array.from({ length: count }).map((_, i) => (
-        <MovieCardSkeleton key={i} />
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: i * 0.1 }}
+        >
+          <MovieCardSkeleton />
+        </motion.div>
       ))}
     </div>
   );
